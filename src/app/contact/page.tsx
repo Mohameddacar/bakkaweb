@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import {
   MapPin,
   Phone,
@@ -20,14 +21,7 @@ export const metadata: Metadata = {
     "Contact Bakka Training Center for inquiries regarding training programs, admissions, schedules, or corporate capacity-building partnerships.",
 };
 
-interface ContactPageProps {
-  searchParams: Promise<{ subject?: string }>;
-}
-
-export default async function ContactPage({ searchParams }: ContactPageProps) {
-  const resolvedSearchParams = await searchParams;
-  const initialSubject = resolvedSearchParams?.subject || "";
-
+export default function ContactPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. PAGE HERO */}
@@ -160,7 +154,15 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                 </p>
               </div>
 
-              <ContactForm initialSubject={initialSubject} />
+              <Suspense
+                fallback={
+                  <div className="p-8 text-center text-sm text-muted-foreground rounded-xl border border-border bg-card">
+                    Loading inquiry form...
+                  </div>
+                }
+              >
+                <ContactForm />
+              </Suspense>
             </div>
           </div>
         </div>

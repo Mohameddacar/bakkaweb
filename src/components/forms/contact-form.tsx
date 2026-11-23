@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -49,7 +50,9 @@ interface ContactFormProps {
   initialSubject?: string;
 }
 
-export function ContactForm({ initialSubject = "" }: ContactFormProps) {
+export function ContactForm() {
+  const searchParams = useSearchParams();
+  const subjectParam = searchParams.get("subject") || "General Inquiry";
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submissionSuccess, setSubmissionSuccess] = React.useState(false);
   const [submittedData, setSubmittedData] = React.useState<ContactFormData | null>(
@@ -67,7 +70,7 @@ export function ContactForm({ initialSubject = "" }: ContactFormProps) {
       fullName: "",
       email: "",
       phone: "",
-      serviceInterest: initialSubject || "General Inquiry",
+      serviceInterest: subjectParam,
       message: "",
     },
   });
